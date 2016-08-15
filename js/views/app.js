@@ -1,2 +1,2 @@
-var app = angular.app("rccApp", [$ngRoute]);
+var app = angular.module("rccApp", [$ngRoute]);
 
