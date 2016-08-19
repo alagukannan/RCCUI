@@ -1,92 +1,106 @@
 <!--- Registration Form -->
+<div data-ng-show="!isEventDataAvailable">
 
-<div class="panel panel-primary">
-    <div class="panel-heading">
-        <h3 class="panel-title">Event {{ event.name }} on {{ event.starttime }} at {{ event.ground.name }}</h3>
-    </div>
+    <img src="/images/rcc_logo.png" class="img-responsive" alt="Image">
 
-    <div class="panel-body">
-
-        <div class="alert alert-danger" ng-show="event.status == 'Cancelled'">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <strong>Game Cancelled</strong> {{event.comments}} ...
+</div>
+<div data-ng-show="isEventDataAvailable">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Event {{ event.name }} on {{ event.starttime }} at {{ event.ground.name }}</h3>
         </div>
-        
-        <div class="alert alert-warning" ng-show="event.status == 'Expired'">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <strong>Event is already over</strong> You can't change the answer...
-        </div>
-        
 
-        <div class="alert alert-success">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <strong>{{params.fullname}}</strong> You responded {{params.status}} for the event.
-        </div>
-        
-        <p>{{event.description}}</p>
-        <p><strong>{{event.totalParticipantCount}}</strong> players were invited and here are the responses so far. More Info can be found <a href="#playerInfo">below</a></p>
-        <ul>
-            <li>Yes : {{event.totalYesCount}}</li>
-            <li>No : {{event.totalNoCount}}</li>
-            <li>May be : {{event.totalMaybeCount}}</li>
-            <li>Guests : {{event.totalGuestCount}}</li>
-        </ul>
+        <div class="panel-body">
 
-
-
-        <form action="" method="POST" role="form" novalidate>
-            <legend>You better come, or somebody is going to get hurt</legend>
-
-            <input type="hidden" name="token" id="token" class="form-control" data-ng-value="params.token" />
-            <input type="hidden" name="Id" class="form-control" data-ng-value="params.Id">
-
-            <div class="form-group">
-                <label class="radio-inline">
-                            <input type="radio" name="status" ng-model="params.status" value="Yes" ng-required="true">Yes
-                </label>
-                <label class="radio-inline">
-                            <input type="radio" name="status"  ng-model="params.status" value="No" ng-required="true">No
-                            </label>
-                <label class="radio-inline">
-                            <input type="radio" name="status"  ng-model="params.status" value="Maybe" ng-required="true">May be
-                            </label>
+            <div class="alert alert-danger" ng-show="event.status == 'Cancelled'">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <strong>Game Cancelled</strong> {{event.comments}} ...
             </div>
-            <div class="form-group">
-            <label for="guests">Guest Players? </label>
-            <select ng-options="n for n in [] | range:1:10" ng-model="params.guests" id="guests">
+
+            <div class="alert alert-warning" ng-show="event.status == 'Expired'">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <strong>Event is already over</strong> You can't change the answer...
+            </div>
+
+            <p>{{event.description}}</p>
+            <p><strong>{{event.totalParticipantCount}}</strong> players were invited and here are the responses so far. More Info can be found <a href="#playerInfo">below</a></p>
+            <ul>
+                <li>Yes : {{event.totalYesCount}}</li>
+                <li>No : {{event.totalNoCount}}</li>
+                <li>May be : {{event.totalMaybeCount}}</li>
+                <li>Guests : {{event.totalGuestCount}}</li>
+            </ul>
+
+
+
+            <form method="POST" role="form" novalidate data-ng-submit="registerParticipant()" data-ng-disabled="event.status != 'Active'">
+                <legend>You better come, or somebody is going to get hurt</legend>
+
+                <div class="alert alert-success" data-ng-show="participant.status">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <strong>{{participant.fullname}}</strong> You responded <strong>{{participant.status}}</strong> for the event.
+                </div>
+
+
+                <div class="alert alert-warning" data-ng-show="errorResponse">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <strong>Error processing registration</strong>
+                    <ul>
+                        <li data-ng-repeat="error in errorResponse.data">{{error.message}}</li>
+                    </ul>
+                </div>
+
+                
+                <input type="hidden" name="token" class="form-control" data-ng-value="params.token">
+                <input type="hidden" name="Id" class="form-control" data-ng-value="participant.Id">
+
+                <div class="form-group">
+                    <label class="radio-inline">
+                            <input type="radio" name="status" ng-model="participant.status" value="Yes" ng-required="true">Yes
+                </label>
+                    <label class="radio-inline">
+                            <input type="radio" name="status"  ng-model="participant.status" value="No" ng-required="true">No
+                            </label>
+                    <label class="radio-inline">
+                            <input type="radio" name="status"  ng-model="participant.status" value="Maybe" ng-required="true">May be
+                            </label>
+                </div>
+                <div class="form-group">
+                    <label for="guests">Guest Players? </label>
+                    <select ng-options="n for n in [] | range:1:10" ng-model="participant.guests" id="guests">
                 <option value="">0</option>                
             </select>
-            </div>
-            <div class="form-group">
-            <label for="comments">Comment:</label>
-            <textarea name="comments" class="form-control" rows="3" ng-model="params.comments"></textarea>
-            </div>
+                </div>
+                <div class="form-group">
+                    <label for="comments">Comment:</label>
+                    <textarea name="comments" class="form-control" rows="3" ng-model="participant.comments"></textarea>
+                </div>
 
-            <button type="submit" class="btn btn-primary" ng-disabled="event.status != 'Active'">Submit</button>
-        </form>
+                <button type="submit" class="btn btn-primary" ng-disabled="event.status != 'Active'">Submit</button>
+            </form>
 
+        </div>
     </div>
-</div>
 
-<!--- Display Players Table --->
-<div class="table-responsive" id="playerInfo">
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th>Player Name</th>
-                <th>Response</th>
-                <th>Guests</th>
-                <th>Comment</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="participant in event.participants | orderBy : '-_status'">
-                <td>{{participant.fullname}}</td>
-                <td>{{participant.status}}</td>
-                <td>{{participant.guests}}</td>
-                <td>{{participant.comments}}</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+    <!--- Display Players Table --->
+    <div class="table-responsive" id="playerInfo">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Player Name</th>
+                    <th>Response</th>
+                    <th>Guests</th>
+                    <th>Comment</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="participant in event.participants | orderBy : '-_status'">
+                    <td>{{participant.fullname}}</td>
+                    <td>{{participant.status}}</td>
+                    <td>{{participant.guests}}</td>
+                    <td>{{participant.comments}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
