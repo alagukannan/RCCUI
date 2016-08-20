@@ -35,8 +35,12 @@
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 <strong>{{participant.fullname}}</strong> You responded <strong>{{participant.status}}</strong> for the event.
             </div>
+            <div class="alert alert-success" data-ng-show="formResponse.isSuccess">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <strong>Successfully</strong> Registered your response ...
+            </div>
 
-            <form method="POST" role="form" novalidate data-ng-submit="registerParticipant()" data-ng-disabled="event.status != 'Active'">
+            <form method="POST" data-ng-hide="formResponse.isSuccess" role="form" novalidate data-ng-submit="registerParticipant()" data-ng-disabled="event.status != 'Active'">
                 <legend>You better come, or somebody is going to get hurt</legend>
 
 
@@ -49,15 +53,12 @@
                         <li data-ng-repeat="error in errorResponse.data">{{error.message}}</li>
                     </ul>
                 </div>
-                
-                <div class="alert alert-success" data-ng-show="formResponse.isSuccess">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <strong>Successfully</strong> Registered your response ...
-                </div>
-                
 
 
-                
+
+
+
+
                 <input type="hidden" name="token" class="form-control" data-ng-value="params.token">
                 <input type="hidden" name="Id" class="form-control" data-ng-value="participant.Id">
 
@@ -102,9 +103,9 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="participant in event.participants | orderBy : '-_status'" ng-class="{'success' : participant._status == 3, 'info' : participant._status == 2, 'danger' : participant._status <= 1}">
+                <tr ng-repeat="participant in event.participants | orderBy : '-_status'" ng-class="{'success' : participant._status == 3, 'info' : participant._status == 2, 'warning' : participant._status == 1, 'danger': participant._status == 0}">
                     <td class="text-capitalize">{{participant.fullname}}</td>
-                    <td>{{participant.status}}</td>
+                    <td>{{participant.status ? participant.status : 'No Response'}}</td>
                     <td>{{participant.guests}}</td>
                     <td>{{participant.comments}}</td>
                 </tr>
