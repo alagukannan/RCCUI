@@ -7,7 +7,7 @@
 <div data-ng-show="isEventDataAvailable">
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <h3 class="panel-title">Event {{ event.name }} on {{ event.starttime }} at {{ event.ground.name }}</h3>
+            <h3 class="panel-title">Event {{ event.name }} on {{ event.starttime | date: 'short'}} at {{ event.ground.name }}</h3>
         </div>
 
         <div class="panel-body">
@@ -23,23 +23,23 @@
             </div>
 
             <p>{{event.description}}</p>
-            <p><strong>{{event.totalParticipantCount}}</strong> players were invited and here are the responses so far. More Info can be found <a href="#playerInfo">below</a></p>
+            <p><strong>{{event.participants.length}}</strong> players were invited and here are the responses so far. More Info can be found <a href="#playerInfo">below</a></p>
             <ul>
-                <li>Yes : {{event.totalYesCount}}</li>
-                <li>No : {{event.totalNoCount}}</li>
-                <li>May be : {{event.totalMaybeCount}}</li>
-                <li>Guests : {{event.totalGuestCount}}</li>
+                <li>Yes : {{ (event.participants | filter: {status : 'Yes'}).length}}</li>
+                <li>No : {{ (event.participants | filter: {status : 'No'}).length}}</li>
+                <li>May be : {{ (event.participants | filter: {status : 'Maybe'}).length}}</li>
+                <li>Guests : {{getGuestCounts()}}</li>
             </ul>
 
-
+            <div class="alert alert-success" data-ng-show="participant.status">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <strong>{{participant.fullname}}</strong> You responded <strong>{{participant.status}}</strong> for the event.
+            </div>
 
             <form method="POST" role="form" novalidate data-ng-submit="registerParticipant()" data-ng-disabled="event.status != 'Active'">
                 <legend>You better come, or somebody is going to get hurt</legend>
 
-                <div class="alert alert-success" data-ng-show="participant.status">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <strong>{{participant.fullname}}</strong> You responded <strong>{{participant.status}}</strong> for the event.
-                </div>
+
 
 
                 <div class="alert alert-warning" data-ng-show="formResponse.isSuccess == false">

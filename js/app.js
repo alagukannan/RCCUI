@@ -2,7 +2,7 @@ var app = angular.module("rccApp", ["ngRoute","ui.bootstrap","ngAnimate"]);
 app.config(function($routeProvider, $locationProvider) {
   $routeProvider
    .when('/token/:token', {
-    templateUrl: '/js/views/registration.htm',
+    templateUrl: '/js/templates/registration.htm',
     controller: 'registrationController',
     controllerAs: 'registration'
    })
