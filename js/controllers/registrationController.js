@@ -16,15 +16,17 @@ app.controller("registrationController",function($scope,$http,$location,$routePa
     });
     //process form
     $scope.registerParticipant = function(){
-        var postParams = $scope.participant;
+        var postParams = angular.copy($scope.participant);
         postParams.token = $scope.params.token;
         postParams.fullname = undefined;
         $http.post(RCC_API_URI, postParams).then(function(response){
             //success handler
-            console.log(response);
+            $scope.formResponse = response;
+            $scope.formResponse.isSuccess = true;
         },function(response){
             //error handler
-            $scope.errorResponse = response;
+            $scope.formResponse = response;
+            $scope.formResponse.isSuccess = false;
         });      
     };
 
