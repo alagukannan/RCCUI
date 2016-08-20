@@ -1,0 +1,36 @@
+{
+  "name": "rccui",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alagukannan/RCCUI.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alagukannan/RCCUI/issues"
+  },
+  "homepage": "https://github.com/alagukannan/RCCUI#readme",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-concurrent": "^2.3.1",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-imagemin": "^1.0.1",
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-contrib-uglify": "^2.0.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-ng-annotate": "^2.0.2",
+    "grunt-sass": "^1.2.1",
+    "load-grunt-config": "^0.19.2"
+  },
+  "dependencies": {
+    "jshint-stylish": "^2.2.1",
+    "time-grunt": "^1.4.0"
+  }
+}
