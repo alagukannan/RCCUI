@@ -4,7 +4,7 @@
     <img src="/images/rcc_logo.png" class="img-responsive" alt="Image">
 
 </div>
-<div data-ng-show="isEventDataAvailable">
+<div data-ng-show="isEventDataAvailable" id="top">
     <div class="panel panel-primary">
         <div class="panel-heading">
             <h3 class="panel-title">Event {{ event.name }} on {{ event.starttime | date: 'short'}} at {{ event.ground.name }}</h3>
@@ -23,7 +23,7 @@
             </div>
 
             <p>{{event.description}}</p>
-            <p><strong>{{event.participants.length}}</strong> players were invited and here are the responses so far. More Info can be found <a href="#playerInfo">below</a></p>
+            <p><strong>{{event.participants.length}}</strong> players were invited and here are the responses so far. More Info can be found <a href="" data-ng-click="gotoAnchor('playerInfo')">below</a></p>
             <ul>
                 <li>Yes : {{ (event.participants | filter: {status : 'Yes'}).length}}</li>
                 <li>No : {{ (event.participants | filter: {status : 'No'}).length}}</li>
@@ -91,7 +91,8 @@
 
     <!--- Display Players Table --->
     <div class="table-responsive" id="playerInfo">
-        <table class="table table-hover">
+        <p class="text-right"><a href="" data-ng-click="gotoAnchor('top')">Top</a></p>
+        <table class="table table-hover table-bordered">
             <thead>
                 <tr>
                     <th>Player Name</th>
@@ -101,13 +102,14 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="participant in event.participants | orderBy : '-_status'">
-                    <td>{{participant.fullname}}</td>
+                <tr ng-repeat="participant in event.participants | orderBy : '-_status'" ng-class="{'success' : participant._status == 3, 'info' : participant._status == 2, 'danger' : participant._status <= 1}">
+                    <td class="text-capitalize">{{participant.fullname}}</td>
                     <td>{{participant.status}}</td>
                     <td>{{participant.guests}}</td>
                     <td>{{participant.comments}}</td>
                 </tr>
             </tbody>
         </table>
+        <p class="text-right"><a href="" data-ng-click="gotoAnchor('top')">Top</a></p>
     </div>
 </div>
