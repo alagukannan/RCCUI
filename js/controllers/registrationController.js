@@ -2,6 +2,23 @@ app.controller("registrationController", function($scope, $http, $location, $rou
 
     $scope.params = $routeParams;
     $scope.isEventDataAvailable = false;
+    $scope.playerTabs = [{
+        heading: 'Yes',
+        statusFilterValue: 3,
+        class: 'list-group-item-success'
+    }, {
+        heading: 'May Be',
+        statusFilterValue: 2,
+        class: 'list-group-item-info'
+    }, {
+        heading: 'No',
+        statusFilterValue: 1,
+        class: 'list-group-item-warning'
+    }, {
+        heading: 'No Response',
+        statusFilterValue: 0,
+        class: 'list-group-item-danger'
+    }];
     var RCC_API_URI = "https://redlandscricketclub-developer-edition.na34.force.com/services/apexrest/alagukannan/registrations/v2";
 
     //get data from rcc-api
@@ -27,7 +44,7 @@ app.controller("registrationController", function($scope, $http, $location, $rou
         var postParams = angular.copy($scope.participant);
         postParams.token = $scope.params.token;
         postParams.fullname = undefined;
-        if(!angular.isNumber(postParams.guests))
+        if (!angular.isNumber(postParams.guests))
             postParams.guests = 0;
         $http.post(RCC_API_URI, postParams).then(function(response) {
             //update the participant records
@@ -85,4 +102,5 @@ app.controller("registrationController", function($scope, $http, $location, $rou
         }
         participant._status = _status;
     };
+
 });
